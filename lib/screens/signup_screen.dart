@@ -1,28 +1,28 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'signup_screen.dart';
-import 'splash_screen.dart';
-import 'home_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
+class _SignupScreenState extends State<SignupScreen>
     with SingleTickerProviderStateMixin {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
   bool _isLoading = false;
   late AnimationController _animController;
   late Animation<double> _fadeAnim;
   late Animation<Offset> _slideAnim;
 
-  static const _primary   = Color(0xFF5961ED);
-  static const _textDark  = Color(0xFF1E293B);
+  static const _primary = Color(0xFF5961ED);
+  static const _textDark = Color(0xFF1E293B);
   static const _textMuted = Color(0xFF64748B);
 
   @override
@@ -43,33 +43,17 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void dispose() {
     _animController.dispose();
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  Future<void> _handleLogin() async {
+  Future<void> _handleSignup() async {
     setState(() => _isLoading = true);
     await Future.delayed(const Duration(seconds: 2));
-    if (!mounted) return;
     setState(() => _isLoading = false);
-
-    // Push splash on top of login; when splash finishes, replace everything
-    // with HomeScreen so back button can't go back to login.
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => SplashScreen(
-          onComplete: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => const HomeScreen()),
-              (route) => false, // remove all previous routes
-            );
-          },
-        ),
-      ),
-    );
   }
 
   @override
@@ -92,7 +76,10 @@ class _LoginScreenState extends State<LoginScreen>
   Widget _buildDesktopLayout() {
     return Row(
       children: [
-        const Expanded(flex: 6, child: SizedBox.shrink()),
+        const Expanded(
+          flex: 6,
+          child: SizedBox.shrink(),
+        ),
         Expanded(
           flex: 4,
           child: Center(
@@ -109,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen>
   Widget _buildMobileLayout() {
     return Column(
       children: [
-        SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.08),
         Expanded(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
@@ -134,13 +121,15 @@ class _LoginScreenState extends State<LoginScreen>
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.5)),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.5),
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Welcome\nback',
+                    'Create\naccount',
                     style: TextStyle(
                       color: _primary,
                       fontSize: 40,
@@ -151,10 +140,27 @@ class _LoginScreenState extends State<LoginScreen>
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Sign in to continue.',
-                    style: TextStyle(color: _textMuted, fontSize: 15),
+                    'Sign up to get started.',
+                    style: TextStyle(
+                      color: _textMuted,
+                      fontSize: 15,
+                      letterSpacing: 0.2,
+                    ),
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 32),
+
+                  // Full Name
+                  _buildLabel('Full Name'),
+                  const SizedBox(height: 8),
+                  _buildTextField(
+                    controller: _nameController,
+                    hint: 'John Doe',
+                    keyboardType: TextInputType.name,
+                    icon: Icons.person_outline_rounded,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Email
                   _buildLabel('Email'),
                   const SizedBox(height: 8),
                   _buildTextField(
@@ -164,6 +170,8 @@ class _LoginScreenState extends State<LoginScreen>
                     icon: Icons.alternate_email_rounded,
                   ),
                   const SizedBox(height: 20),
+
+                  // Password
                   _buildLabel('Password'),
                   const SizedBox(height: 8),
                   _buildTextField(
@@ -183,38 +191,40 @@ class _LoginScreenState extends State<LoginScreen>
                           setState(() => _obscurePassword = !_obscurePassword),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        foregroundColor: _primary,
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  const SizedBox(height: 20),
+
+                  // Confirm Password
+                  _buildLabel('Confirm Password'),
+                  const SizedBox(height: 8),
+                  _buildTextField(
+                    controller: _confirmPasswordController,
+                    hint: '••••••••',
+                    obscure: _obscureConfirmPassword,
+                    icon: Icons.lock_outline_rounded,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureConfirmPassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: _textMuted,
+                        size: 20,
                       ),
-                      child: const Text(
-                        'Forgot password?',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: _primary,
-                        ),
-                      ),
+                      onPressed: () => setState(
+                          () => _obscureConfirmPassword = !_obscureConfirmPassword),
                     ),
                   ),
                   const SizedBox(height: 32),
+
+                  // Sign Up Button
                   SizedBox(
                     width: double.infinity,
                     height: 52,
                     child: ElevatedButton(
-                      onPressed: _isLoading ? null : _handleLogin,
+                      onPressed: _isLoading ? null : _handleSignup,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _primary,
                         foregroundColor: Colors.white,
-                        disabledBackgroundColor:
-                            _primary.withValues(alpha: 0.5),
+                        disabledBackgroundColor: _primary.withValues(alpha: 0.5),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
@@ -225,48 +235,63 @@ class _LoginScreenState extends State<LoginScreen>
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
-                                  strokeWidth: 2, color: Colors.white),
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
                             )
                           : const Text(
-                              'Sign In',
+                              'Sign Up',
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w700),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.5,
+                              ),
                             ),
                     ),
                   ),
                   const SizedBox(height: 24),
+
+                  // Divider
                   Row(
                     children: [
                       Expanded(
-                          child: Divider(
-                              color: _textMuted.withValues(alpha: 0.25))),
+                        child: Divider(color: _textMuted.withValues(alpha: 0.25)),
+                      ),
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Text('or',
-                            style:
-                                TextStyle(color: _textMuted, fontSize: 13)),
+                        child: Text(
+                          'or',
+                          style: TextStyle(
+                            color: _textMuted,
+                            fontSize: 13,
+                          ),
+                        ),
                       ),
                       Expanded(
-                          child: Divider(
-                              color: _textMuted.withValues(alpha: 0.25))),
+                        child: Divider(color: _textMuted.withValues(alpha: 0.25)),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 24),
+
+                  // Already have an account
                   Center(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text("Don't have an account? ",
-                            style:
-                                TextStyle(color: _textMuted, fontSize: 14)),
-                        GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const SignupScreen()),
+                        const Text(
+                          'Already have an account? ',
+                          style: TextStyle(
+                            color: _textMuted,
+                            fontSize: 14,
                           ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
                           child: const Text(
-                            'Sign Up',
+                            'Sign In',
                             style: TextStyle(
                               color: _primary,
                               fontSize: 14,
@@ -287,13 +312,15 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Widget _buildLabel(String text) {
-    return Text(text,
-        style: const TextStyle(
-          color: _textDark,
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
-        ));
+    return Text(
+      text,
+      style: const TextStyle(
+        color: _textDark,
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.5,
+      ),
+    );
   }
 
   Widget _buildTextField({
@@ -308,24 +335,27 @@ class _LoginScreenState extends State<LoginScreen>
       controller: controller,
       obscureText: obscure,
       keyboardType: keyboardType,
-      style: const TextStyle(color: _textDark, fontSize: 15),
+      style: const TextStyle(
+        color: _textDark,
+        fontSize: 15,
+      ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle:
-            TextStyle(color: _textMuted.withValues(alpha: 0.6), fontSize: 15),
+        hintStyle: TextStyle(
+          color: _textMuted.withValues(alpha: 0.6),
+          fontSize: 15,
+        ),
         prefixIcon: Icon(icon, color: _textMuted, size: 20),
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide:
-              BorderSide(color: _textMuted.withValues(alpha: 0.2)),
+          borderSide: BorderSide(color: _textMuted.withValues(alpha: 0.2)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide:
-              BorderSide(color: _textMuted.withValues(alpha: 0.2)),
+          borderSide: BorderSide(color: _textMuted.withValues(alpha: 0.2)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),

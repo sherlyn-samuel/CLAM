@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart'; // ← ADD THIS
+import 'screens/login_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'CLAM',
-      home: const LoginScreen(), 
+      theme: ThemeData(
+        colorSchemeSeed: const Color(0xFF5961ED),
+        useMaterial3: true,
+      ),
+      home: const LoginScreen(), // straight to login, no splash
     );
   }
 }
