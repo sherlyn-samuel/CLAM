@@ -1,0 +1,6 @@
+**/venv/
+**/.dart_tool/
+**/build/
+**/.idea/
+**/*.lock
+**/chrome-device/
