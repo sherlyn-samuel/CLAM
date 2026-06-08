@@ -63,6 +63,7 @@ flutter:
       - assets/images/CLAM-LOGIN.jpg
       - assets/images/loadingscreenfull.png
       - assets/images/loadingscreenskin.png
+      - frontend/assets/images/axolotl.png
 
 
   # To add assets to your application, add an assets section, like this:
