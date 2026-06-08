@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 
-// ─── 1. DEFINE THE MISSING ENUM (Fixes Home Screen Errors!) ──────────────────
+// ─── 1. DEFINE THE MISSING ENUM ──────────────────────────────────────────────
 enum DifficultyLevel { easy, medium, hard }
 
 // ─── Embedded Flame Game for Axey's Animation Loop ──────────────────────────
@@ -38,7 +38,7 @@ class AxeyAnimationGame extends FlameGame {
 
 // ─── Main Game Screen Layout ──────────────────────────────────────────────────
 class GameScreen extends StatefulWidget {
-  // ─── 2. ACCEPT THE LEVEL PARAMETER (Fixes Parameter Error!) ────────────────
+  // ─── 2. ACCEPT THE LEVEL PARAMETER ─────────────────────────────────────────
   final DifficultyLevel? level;
   const GameScreen({super.key, this.level});
 
