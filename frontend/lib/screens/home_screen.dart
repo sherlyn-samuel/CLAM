@@ -260,8 +260,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     AnimatedCrossFade(
                       firstChild: const SizedBox(height: 0),
+                      // FIX: Changed const EdgeInsets.top(16.0) to const EdgeInsets.only(top: 16.0)
                       secondChild: Padding(
-                        padding: const EdgeInsets.top(16.0),
+                        padding: const EdgeInsets.only(top: 16.0),
                         child: Row(
                           children: [
                             _buildDifficultyButton(context, 'Easy', const Color(0xFF4CAF50), DifficultyLevel.easy),
