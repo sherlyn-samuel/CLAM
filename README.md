@@ -22,12 +22,3 @@ CLAM is a research-grade infrastructure designed to capture high-granularity lea
 | **Quiz Loop** | Cognitive Load Manipulation | Latency (ms), Error rate |
 | **Telemetry** | Longitudinal Trajectory | Response History ($x_{1}, x_{2}, \dots, x_{t}$) |
 | **DKT Engine** | Ability Estimation | Predicted Probability ($p$) |
-
-## 4-Step Implementation Roadmap
-1. **Define the Ontology (The "What"):** Before coding, create a JSON schema for your questions that includes `concept_tags` (e.g., "fractions-addition") and `misconception_tags` (e.g., "common-error-denominator-addition"). Your app should be able to query questions based on these tags.
-2. **Standardize the Data Dictionary:** Ensure every database column has a formal definition. *Example:* `response_time_ms` is defined as the interval between "question render" and "user click event."
-3. **Implement IRT Baselines:** Do not rely solely on the LSTM. Refactor your `ml/` folder to include a script that runs a 1-Parameter Logistic (Rasch) Model on your data. This is your "sanity check"—if your Deep Learning model doesn't beat the baseline, it isn't ready for a publication.
-4. **Formalize Documentation:** Adopt a consistent README format that lists your contact info, data usage agreement (or license), and version history. This makes the testbed usable by other researchers.
-
----
-*Maintained as an Open-Source Testbed for Educational Informatics.*
