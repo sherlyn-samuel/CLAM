@@ -48,7 +48,7 @@ CLAM/
    git clone [https://github.com/sherlyn-samuel/CLAM.git](https://github.com/sherlyn-samuel/CLAM.git)
    cd CLAM
    python -m venv venv
-   source venv/bin/activate  # On Windows use: venv\Scripts\activate
+   source venv/bin/activate  # On Windows use: venv\Scripts\activate```
 
 ## Research Context
 This repository is a work in progress
