@@ -1,24 +1,54 @@
-# CLAM: An Open-Source Testbed for Longitudinal Knowledge Tracing in Primary Mathematics
+# 🦪 CLAM (Continuous Learning Analytics & Modeling)
 
-## Project Description
-CLAM is a research-grade infrastructure designed to capture high-granularity learner interaction data. Unlike commercial learning apps, CLAM is built as a **Research Testbed** to host controlled experiments in cognitive load, misconception detection, and knowledge tracing. It provides a structured environment where learning interventions can be deployed, measured, and analyzed through a standardized telemetry pipeline.
+A research-oriented backend testbed for educational informatics. CLAM is designed to handle high-throughput telemetry logging, detect student misconceptions in real-time, and run dynamic student knowledge modeling. It serves as the analytical engine for interactive learning environments.
 
-## Core Research Objectives
-* **Longitudinal Cognitive Modeling:** To track learner progression over time using standardized item parameters.
-* **Misconception Identification:** To map specific student response patterns (distractor selection) to documented mathematical misconceptions.
-* **Algorithmic Transparency:** To compare black-box Deep Learning models (e.g., LSTMs) against interpretable psychometric models (e.g., IRT) in real-world educational settings.
+## Core Features
 
-## System Architecture & Instrumentation
-* **Data Collection (The "Instrument"):** Every interaction is logged with precise metadata: `timestamp`, `concept_id` (Bloom’s Taxonomy), `difficulty_parameter`, `response_latency` (ms), and `distractor_id`.
-* **Telemetry Pipeline:** FastAPI backend ensures atomic logging to ClickHouse, optimized for high-frequency time-series educational data.
-* **Evaluation Baseline:** The ML module is designed to support A/B testing between models, with built-in evaluation scripts that calculate RMSE and AUC against standard IRT baselines.
+* **Deep Knowledge Tracing (DKT):** A PyTorch-based neural student modeling pipeline that evaluates concept mastery probabilities and models individual learning trajectories over time.
+* **Telemetry & Interaction Logging:** A high-throughput data ingestion pipeline capturing continuous user interactions, tracking response latency, and identifying behavioral anomalies like rapid guessing or cognitive fatigue.
+* **Misconception Detection:** Rule-based engine that maps incorrect student responses against a predefined taxonomy of common misconceptions.
+* **Automated Content Generation:** FastAPI-driven integration with the Gemini API for adaptive question synthesis and dynamic content scaling.
 
-## Research Design Document (RDD)
-*Keep this document alongside your code. It justifies your design decisions to any PI or reviewer.*
+## Architecture & Tech Stack
 
-| Component | Scientific Purpose | Measurement/Variable |
-| :--- | :--- | :--- |
-| **Question Bank** | Standardized Item Calibration | Difficulty ($b$), Discrimination ($a$) |
-| **Quiz Loop** | Cognitive Load Manipulation | Latency (ms), Error rate |
-| **Telemetry** | Longitudinal Trajectory | Response History ($x_{1}, x_{2}, \dots, x_{t}$) |
-| **DKT Engine** | Ability Estimation | Predicted Probability ($p$) |
+* **Backend API Framework:** Python & FastAPI
+* **Server:** Uvicorn (ASGI web server)
+* **Machine Learning Engine:** PyTorch (Sequence modeling and DKT implementation)
+* **LLM Engine:** Gemini API 
+* **Data & Telemetry Layer:** ClickHouse (Optimized columnar database for high-volume, time-series interaction logging and rapid analytical queries)
+
+## Project Structure
+
+```text
+CLAM/
+├── api/
+│   ├── routes_telemetry.py   # Ingestion endpoints for interaction logs
+│   ├── routes_dkt.py         # Endpoints for mastery prediction
+│   └── routes_generation.py  # Gemini LLM integration for questions
+├── core/
+│   ├── clickhouse_client.py  # Database connection and query execution
+│   └── misconception_map.py  # Rule engine for error state mapping
+├── models/
+│   ├── dkt_model.py          # PyTorch LSTM architecture for knowledge tracing
+│   └── train.py              # Training script for the DKT model
+├── requirements.txt
+├── main.py                   # FastAPI application entry point
+└── README.md
+
+## System Setup
+
+### Prerequisites
+* Python 3.10+
+* ClickHouse Instance (running locally or via Docker)
+
+### Installation & Execution
+
+1. **Clone the repository and set up the virtual environment:**
+   ```bash
+   git clone [https://github.com/sherlyn-samuel/CLAM.git](https://github.com/sherlyn-samuel/CLAM.git)
+   cd CLAM
+   python -m venv venv
+   source venv/bin/activate  # On Windows use: venv\Scripts\activate
+
+## Research Context
+This repository is a work in progress
