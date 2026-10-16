@@ -48,7 +48,6 @@ Flutter client  ──►  FastAPI backend  ──►  ClickHouse
                               knowledge tracing + evaluation
 ```
 
-[TODO: confirm how the ML module reads data from ClickHouse, then adjust the diagram if needed.]
 
 ## Design rationale
 
@@ -85,7 +84,7 @@ These are the questions the testbed is designed to support. They are not yet ans
 
 ## Data and ethics
 
-[TODO: state this plainly. For example: whether any data collected so far is development/test data only or comes from real learners, and, if children participate, what ethics approval and parental consent are in place. Do not leave this vague.]
+
 
 ## Repository layout
 
@@ -97,11 +96,9 @@ android/         Android build configuration
 assets/images/   Hand-drawn game artwork
 ```
 
-[TODO: check descriptions against the actual contents of each folder.]
-
 ## Getting started
 
-[TODO: add exact setup and run steps for the backend, database, and client, and verify them on a clean machine.]
+
 
 ## Limitations
 
@@ -116,4 +113,3 @@ assets/images/   Hand-drawn game artwork
 
 ## License
 
-[TODO: choose a license, including for the artwork, and add a LICENSE file.]
